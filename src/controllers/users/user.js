@@ -30,6 +30,9 @@ export const getAllUsers = async (req, res) => {
   try {
     const response = await turso.execute("SELECT * FROM users;");
 
+    const singleUser = await getUserByEmail("paotico@gmail.com");
+    console.log(singleUser, "singleUser");
+
     res.status(200).json(response.rows);
   } catch (error) {
     console.error(error);
@@ -50,6 +53,49 @@ export const getUserById = async (req, res) => {
     if (response.rows.length === 0) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
+    res.status(200).json(response.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener el usuario" });
+  }
+};
+
+// export const getUserByEmail = async (req, res) => {
+//   const { email } = req.body;
+//   console.log(email);
+//   console.log(req.params);
+//   console.log(req);
+//   try {
+//     const response = await turso.execute(
+//       "SELECT * FROM users WHERE email = ?;",
+//       [email]
+//     );
+
+//     if (response.rows.length === 0) {
+//       return res.status(404).json({ error: "Usuario no encontrado" });
+//     }
+//     res.status(200).json(response.rows);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Error al obtener el usuario" });
+//   }
+// };
+
+export const getUserByEmail = async (email) => {
+  // const { email } = req.body;
+  // console.log(email);
+  // console.log(req.params);
+  // console.log(req);
+  try {
+    const response = await turso.execute(
+      "SELECT * FROM users WHERE email = ?;",
+      [email]
+    );
+
+    if (response.rows.length === 0) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    return response.rows[0];
     res.status(200).json(response.rows);
   } catch (error) {
     console.error(error);

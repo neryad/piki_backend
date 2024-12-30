@@ -24,8 +24,8 @@ initializeDatabase()
     console.log(error);
   });
 // Middleware para manejar rutas no existentes
-app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, "../public/404.html"));
-});
+// app.use((req, res, next) => {
+//   res.status(404).sendFile(path.join(__dirname, "../public/404.html"));
+// });
 app.use(router);
 app.listen(PORT, () => console.log(`Api its up port ${PORT}`));
