@@ -30,7 +30,8 @@ export const login = async (req, res) => {
     }
 
     const token = await generateJWT(user.id, user.email);
-    res.status(200).json({ token });
+    const loggedUser = { ...user, password: undefined, token };
+    res.status(200).json({ loggedUser });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al hacer login" });
