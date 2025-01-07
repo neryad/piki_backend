@@ -30,10 +30,11 @@ const JWT_SECRET = process.env.SECRETORPRIVATEKEY;
 export const generateJWT = (id, email) => {
   return new Promise((resolve, reject) => {
     const payload = { id, email };
-    sign(payload, JWT_SECRET, { expiresIn: "1h" }, (err, token) => {
+    sign(payload, JWT_SECRET, { expiresIn: "1m" }, (err, token) => {
       if (err) {
         reject(err);
       } else {
+        console.log(token);
         resolve(token);
       }
     });

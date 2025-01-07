@@ -29,11 +29,12 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
   try {
     const response = await turso.execute("SELECT * FROM users;");
+    const users = response.rows.map((user) => {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    });
 
-    const singleUser = await getUserByEmail("paotico@gmail.com");
-    console.log(singleUser, "singleUser");
-
-    res.status(200).json(response.rows);
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener los usuarios" });
