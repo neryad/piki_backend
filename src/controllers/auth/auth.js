@@ -1,7 +1,7 @@
 import { turso } from "../../db/db.js";
 import bcrypt from "bcrypt";
 import { getUserByEmail } from "../users/user.js";
-import { generateJWT } from "../../helpers/generate-jw.js";
+import { generateJWT } from "../../helpers/jwt.js";
 
 export const login = async (req, res) => {
   let { email, password } = req.body;

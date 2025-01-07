@@ -4,16 +4,16 @@ import {
   getRoles,
   deleteRole,
 } from "../controllers/roles/roles.js";
-
+import { verifyToken } from "../helpers/middleware.js";
 const router = Router();
 
 // Crear un rol
-router.post("/", createRole);
+router.post("/", verifyToken, createRole);
 
 // Obtener todos los roles
-router.get("/", getRoles);
+router.get("/", verifyToken, getRoles);
 
 // Eliminar un rol por ID
-router.delete("/:id", deleteRole);
+router.delete("/:id", verifyToken, deleteRole);
 
 export { router };
