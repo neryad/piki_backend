@@ -18,6 +18,7 @@ export const generateJWT = (id, email) => {
 };
 
 export const verifyJWT = (token) => {
+  console.log(token, 'token');
   return new Promise((resolve, reject) => {
     verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
