@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import helmet from "helmet";
 import "dotenv/config";
-
 import { router } from "./routes/index.js";
 import initializeDatabase from "./db/initdb.js";
 
@@ -23,9 +22,16 @@ initializeDatabase()
   .catch((error) => {
     console.log(error);
   });
-// Middleware para manejar rutas no existentes
+
+app.get("/", (req, res) => {
+  res.redirect("/api-docs");
+});
+
+
+
+app.use(router);
+//Middleware para manejar rutas no existentes
 // app.use((req, res, next) => {
 //   res.status(404).sendFile(path.join(__dirname, "../public/404.html"));
 // });
-app.use(router);
 app.listen(PORT, () => console.log(`Api its up port ${PORT}`));
