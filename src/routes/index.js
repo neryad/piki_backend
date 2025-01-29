@@ -60,9 +60,24 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "Documentación de la API usando Swagger",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: [`${__dirname}/*.js`], // Asegúrate de que los archivos de rutas tengan comentarios JSDoc
 };
+
 
 // Generar documentación Swagger
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
