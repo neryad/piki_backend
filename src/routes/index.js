@@ -2,13 +2,29 @@ import { Router } from "express";
 import { readdirSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const PATH_ROUTER = __dirname;
 
 const router = Router();
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Error:
+ *       type: object
+ *       properties:
+ *         message:
+ *           type: string
+ *           description: Mensaje de error
+ *         code:
+ *           type: integer
+ *           description: Código de error HTTP
+ */
 
 /**
  * The cleanFileName function removes the file extension from a given file name.
@@ -34,5 +50,25 @@ readdirSync(PATH_ROUTER).filter((filename) => {
     });
   }
 });
+
+// Configuración de Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "API Documentación",
+      version: "1.0.0",
+      description: "Documentación de la API usando Swagger",
+    },
+  },
+  apis: [`${__dirname}/*.js`], // Asegúrate de que los archivos de rutas tengan comentarios JSDoc
+};
+
+// Generar documentación Swagger
+const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
+// Agregar Swagger a las rutas
+router.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 export { router };
