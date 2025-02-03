@@ -9,9 +9,19 @@ const router = Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Roles
+ *   description: Gestión de roles de usuarios
+ */
+
+/**
+ * @swagger
  * /roles:
  *   post:
  *     summary: Crear un nuevo rol
+ *     description: |
+ *       Este endpoint permite crear un nuevo rol en la base de datos.
+ *       El campo `name` es obligatorio y debe ser único.
  *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
@@ -24,11 +34,55 @@ const router = Router();
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Nombre del rol.
+ *                 example: Administrador
+ *             required:
+ *               - name
  *     responses:
  *       201:
- *         description: Rol creado exitosamente
+ *         description: Rol creado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Rol creado exitosamente
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: Administrador
+ *       400:
+ *         description: |
+ *           Error de validación.
+ *           - Si el campo `name` no está presente.
+ *           - Si el nombre del rol ya existe.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: El nombre del rol es obligatorio
  *       500:
- *         description: Error al crear el rol
+ *         description: |
+ *           Error interno del servidor.
+ *           - Si ocurre un error al crear el rol en la base de datos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al crear el rol
  */
 
 /**
@@ -36,14 +90,39 @@ const router = Router();
  * /roles:
  *   get:
  *     summary: Obtener todos los roles
+ *     description: |
+ *       Este endpoint retorna una lista de todos los roles registrados en la base de datos.
  *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Lista de roles
+ *         description: Lista de roles.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: Administrador
  *       500:
- *         description: Error al obtener los roles
+ *         description: |
+ *           Error interno del servidor.
+ *           - Si ocurre un error al obtener los roles.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al obtener los roles
  */
 
 /**
@@ -51,6 +130,9 @@ const router = Router();
  * /roles/{id}:
  *   delete:
  *     summary: Eliminar rol por ID
+ *     description: |
+ *       Este endpoint permite eliminar un rol de la base de datos utilizando su ID.
+ *       **Nota:** Si el rol está asignado a algún usuario, no se podrá eliminar.
  *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
@@ -60,12 +142,43 @@ const router = Router();
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID del rol
+ *         description: ID del rol.
+ *         example: 1
  *     responses:
  *       200:
- *         description: Rol eliminado exitosamente
+ *         description: Rol eliminado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Rol eliminado exitosamente
+ *       404:
+ *         description: |
+ *           Rol no encontrado.
+ *           - Si no existe un rol con el ID proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Rol no encontrado
  *       500:
- *         description: Error al eliminar el rol
+ *         description: |
+ *           Error interno del servidor.
+ *           - Si ocurre un error al eliminar el rol.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al eliminar el rol
  */
 
 router.post("/", verifyToken, createRole);
