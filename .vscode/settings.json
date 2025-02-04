@@ -1,10 +1,12 @@
 {
   "cSpell.words": [
     "AUTOINCREMENT",
+    "cloudinary",
     "inicialización",
     "initdb",
     "libsql",
     "piki",
+    "streamifier",
     "turso"
   ]
 }
