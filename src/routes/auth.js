@@ -89,6 +89,8 @@ const router = Router();
  *                   example: Error al hacer login
  */
 
+router.post("/login", login);
+
 /**
  * @swagger
  * /auth/refresh-token:
