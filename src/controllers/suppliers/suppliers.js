@@ -1,5 +1,4 @@
 import { turso } from "../../db/db.js";
-import bcrypt from "bcrypt";
 
 export const createSupplier = async (req, res) => {
   let { name, lastName, phone, email, created_at } = req.body;
