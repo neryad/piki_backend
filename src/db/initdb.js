@@ -4,7 +4,7 @@ const initializeDatabase = async () => {
   try {
     console.log("Verificando y creando tablas si no existen...");
 
-    const tables = ["roles", "users", "suppliers", "materials"];
+    const tables = ["roles", "users", "suppliers", "materials", "sliders"];
     for (const table of tables) {
       console.log(`Verificando la existencia de la tabla "${table}"...`);
       const result = await turso.execute(`
@@ -59,6 +59,15 @@ const initializeDatabase = async () => {
               costByUnit REAL NOT NULL,
               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
               FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+            );
+          `);
+        } else if (table === "sliders") {
+          await turso.execute(`
+            CREATE TABLE sliders (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              imageUrl TEXT NOT NULL,
+              link TEXT NOT NULL,
+              isActive boolean NOT NULL
             );
           `);
         }
