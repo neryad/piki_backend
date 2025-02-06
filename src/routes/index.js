@@ -56,7 +56,7 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "API Documentación",
+      title: "Piki BackEnd API Documentación",
       version: "1.0.0",
       description: "Documentación de la API usando Swagger",
     },
@@ -78,12 +78,10 @@ const swaggerOptions = {
   apis: [`${__dirname}/*.js`], // Asegúrate de que los archivos de rutas tengan comentarios JSDoc
 };
 
-
 // Generar documentación Swagger
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // Agregar Swagger a las rutas
 router.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
 
 export { router };
