@@ -38,3 +38,39 @@ export const deleteRole = async (req, res) => {
     res.status(500).json({ error: "Error al eliminar el rol" });
   }
 };
+
+// Actualizar un rol por ID
+export const updateRole = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    await turso.execute("UPDATE roles SET name = ? WHERE id = ?;", [name, id]);
+    res.status(200).json({ message: "Rol actualizado exitosamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al actualizar el rol" });
+  }
+};
+
+// Obtener un rol por ID
+
+export const getRoleById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await turso.execute("SELECT * FROM roles WHERE id = ?;", [
+      id,
+    ]);
+    const rows = result.rows; // Ajusta esto según la estructura real de la respuesta
+
+    if (rows.length === 0) {
+      res.status(404).json({ error: "Rol no encontrado" });
+    } else {
+      res.status(200).json(rows[0]);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al obtener el rol" });
+  }
+};
