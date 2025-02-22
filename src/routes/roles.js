@@ -3,6 +3,8 @@ import {
   createRole,
   getRoles,
   deleteRole,
+  updateRole,
+  getRoleById,
 } from "../controllers/roles/roles.js";
 import { verifyToken } from "../helpers/middleware.js";
 const router = Router();
@@ -181,8 +183,136 @@ const router = Router();
  *                   example: Error al eliminar el rol
  */
 
+/**
+ * @swagger
+ * /roles/{id}:
+ *   put:
+ *     summary: Actualizar rol por ID
+ *     description: |
+ *       Este endpoint permite actualizar un rol de la base de datos utilizando su ID.
+ *     tags: [Roles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del rol.
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nombre del rol.
+ *                 example: Administrador
+ *             required:
+ *               - name
+ *     responses:
+ *       200:
+ *         description: Rol actualizado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Rol actualizado exitosamente
+ *       404:
+ *         description: |
+ *           Rol no encontrado.
+ *           - Si no existe un rol con el ID proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Rol no encontrado
+ *       500:
+ *         description: |
+ *           Error interno del servidor.
+ *           - Si ocurre un error al actualizar el rol.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al actualizar el rol
+ */
+
+/**
+ * @swagger
+ * /roles/{id}:
+ *   get:
+ *     summary: Obtener rol por ID
+ *     description: |
+ *       Este endpoint retorna un rol registrado en la base de datos utilizando su ID.
+ *     tags: [Roles]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del rol.
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Rol encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   example: Administrador
+ *       404:
+ *         description: |
+ *           Rol no encontrado.
+ *           - Si no existe un rol con el ID proporcionado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Rol no encontrado
+ *       500:
+ *         description: |
+ *           Error interno del servidor.
+ *           - Si ocurre un error al obtener el rol.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al obtener el rol
+ */
+
 router.post("/", verifyToken, createRole);
 router.get("/", verifyToken, getRoles);
+router.get("/:id", verifyToken, getRoleById);
 router.delete("/:id", verifyToken, deleteRole);
+router.put("/:id", verifyToken, updateRole);
 
 export { router };
