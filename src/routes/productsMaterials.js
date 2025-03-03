@@ -7,6 +7,7 @@ import {
   deleteMaterialProduct,
   getAllMaterialsProducts,
   getMaterialProductById,
+  getAllMaterialsProductRelation,
 } from "../controllers/products_material/productsMaterials.js";
 
 /**
@@ -194,6 +195,34 @@ import {
 
 /**
  * @swagger
+ * /productsMaterials/relation:
+ *   get:
+ *     summary: Obtener todos los materiales de productos
+ *     description con relación: Retorna una lista de todos los materiales de productos.
+ *     tags: [ProductsMaterials]
+ *     responses:
+ *       200:
+ *         description: Lista de materiales de productos obtenida exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProductMaterial'
+ *       500:
+ *         description: Error interno del servidor al obtener los materiales de productos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Error al obtener los materiales de productos
+ */
+
+/**
+ * @swagger
  * /productsMaterials/{id}:
  *   get:
  *     summary: Obtener un material de producto por ID
@@ -264,6 +293,7 @@ router.post("/", verifyToken, createMaterialProduct);
 router.put("/:id", verifyToken, updateMaterialProduct);
 router.delete("/:id", verifyToken, deleteMaterialProduct);
 router.get("/", verifyToken, getAllMaterialsProducts);
+router.get("/relation", verifyToken, getAllMaterialsProductRelation);
 router.get("/:id", verifyToken, getMaterialProductById);
 
 export { router };

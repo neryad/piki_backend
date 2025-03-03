@@ -73,6 +73,21 @@ export const getAllMaterialsProducts = async (req, res) => {
   }
 };
 
+export const getAllMaterialsProductRelation = async (req, res) => {
+  try {
+    const response = await turso.execute(
+      " SELECT M.name as materialName,M.id as materialId,P.name as productName,P.id as productId FROM 'productsMaterials' as PM INNER JOIN 'materials' as M on PM.material_id =  M.id INNER JOIN 'products' as P on PM.product_id =  P.id  "
+    );
+    const materialsProducts = response.rows;
+    res.status(200).json(materialsProducts);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "Error al obtener los materiales de productos" });
+  }
+};
+
 export const getMaterialProductById = async (req, res) => {
   const { id } = req.params;
 
