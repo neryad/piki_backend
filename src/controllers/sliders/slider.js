@@ -90,7 +90,7 @@ export const updateSlider = async (req, res) => {
 export const getSliders = async (req, res) => {
   try {
     const { rows } = await turso.execute(
-      "SELECT * FROM sliders WHERE isActive = 'true';"
+      "SELECT * FROM sliders WHERE isActive = 1;"
     );
     console.log(rows);
     res.status(200).json(rows);
