@@ -104,33 +104,70 @@ export const getUserByEmail = async (email) => {
   }
 };
 
+// export const updateUser = async (req, res) => {
+//   const { id } = req.params;
+//   const { name, lastName, phone, email, password, role_id } = req.body;
+
+//   try {
+//     const saltRounds = 10;
+//     const hashedPassword = password
+//       ? await bcrypt.hash(password, saltRounds)
+//       : undefined;
+
+//     const query = `
+//       UPDATE users
+//       SET name = ?, lastName = ?, phone = ?, email = ?, ${
+//         hashedPassword ? "password = ?, " : ""
+//       } role_id = ?
+//       WHERE id = ?;
+//     `;
+//     const params = [
+//       name,
+//       lastName,
+//       phone,
+//       email,
+//       hashedPassword,
+//       role_id,
+//       id,
+//     ].filter((param) => param !== undefined);
+//     console.log(query, params, "query, params");
+//     await turso.execute(query, params);
+//     res.status(200).json({ message: "Usuario actualizado exitosamente" });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Error al actualizar el usuario" });
+//   }
+// };
+
 export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, lastName, phone, email, password, role_id } = req.body;
 
   try {
     const saltRounds = 10;
-    const hashedPassword = password
-      ? await bcrypt.hash(password, saltRounds)
-      : undefined;
+    let hashedPassword;
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, saltRounds);
+    } else {
+      // Obtener la contraseña actual del usuario
+      const response = await turso.execute(
+        "SELECT password FROM users WHERE id = ?;",
+        [id]
+      );
+      if (response.rows.length === 0) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+      hashedPassword = response.rows[0].password;
+    }
 
     const query = `
       UPDATE users
-      SET name = ?, lastName = ?, phone = ?, email = ?, ${
-        hashedPassword ? "password = ?, " : ""
-      } role_id = ?
+      SET name = ?, lastName = ?, phone = ?, email = ?, password = ?, role_id = ?
       WHERE id = ?;
     `;
-    const params = [
-      name,
-      lastName,
-      phone,
-      email,
-      hashedPassword,
-      role_id,
-      id,
-    ].filter((param) => param !== undefined);
-
+    const params = [name, lastName, phone, email, hashedPassword, role_id, id];
+    console.log(query, params, "query, params");
     await turso.execute(query, params);
     res.status(200).json({ message: "Usuario actualizado exitosamente" });
   } catch (error) {
